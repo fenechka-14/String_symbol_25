@@ -39,10 +39,21 @@ static void string_init(void *dst){
    *slot = NULL;
 }
 
-static void string_copy(void *dst, const void *src){
-    char **d = (char**)dst; //указывает на слот приемник
+static void string_copy(void *dst, const void *src) {
+    char **d = (char**)dst;
     const char **s = (const char**)src;
-    *d = (char*)*s;
+    const char *src_str = *s;
+    if (src_str == NULL) {
+        *d = NULL;
+    } else {
+        *d = malloc(strlen(src_str) + 1);
+        if (*d) {
+            strcpy(*d, src_str);
+        } else {
+            // обработка ошибки выделения памяти
+            *d = NULL;
+        }
+    }
 }
 
 static void string_free(void *elem){
