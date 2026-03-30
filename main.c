@@ -314,44 +314,12 @@ int main(void) {
                     printf("  Коллекция не создана или неверный тип.\n");
                     break;
                 }
-
-                if (t == 1) {
-                    // для символов: конкатенация сама с собой
-                    if (result) free_collection(result);
-                    result = concat(a, a);
-                    if (result) {
-                        printf("  Конкатенация выполнена. Результат сохранён в 'result'.\n");
-                    } else {
-                        printf("  Ошибка конкатенации.\n");
-                    }
-                } else { // t == 2, строки: выводим склеенную строку из элементов a
-                    if (size(a) == 0) {
-                        printf("  Коллекция пуста.\n");
-                        break;
-                    }
-                    // Вычисляем общую длину с учётом пробелов
-                    size_t total_len = 0;
-                    for (size_t i = 0; i < size(a); ++i) {
-                        const char *s = *(const char**)get(a, i);
-                        if (s) total_len += strlen(s);
-                    }
-                    if (size(a) > 1) total_len += (size(a) - 1); // пробелы между словами
-
-                    char *buffer = malloc(total_len + 1);
-                    if (buffer) {
-                        buffer[0] = '\0';
-                        for (size_t i = 0; i < size(a); ++i) {
-                            const char *s = *(const char**)get(a, i);
-                            if (s) {
-                                if (i > 0) strcat(buffer, " ");
-                                strcat(buffer, s);
-                            }
-                        }
-                        printf("  Результат (склеенная строка): \"%s\"\n", buffer);
-                        free(buffer);
-                    } else {
-                        printf("  Не удалось выделить память для склейки.\n");
-                    }
+                if (result) free_collection(result);
+                result = concat(a, a);  // для демонстрации конкатенируем саму с собой
+                if (result) {
+                    printf("  Конкатенация выполнена. Результат сохранён в 'result'.\n");
+                } else {
+                    printf("  Ошибка конкатенации (память или несовпадение типов).\n");
                 }
                 break;
             }
@@ -406,6 +374,14 @@ int main(void) {
                 if (col_str) free_collection(col_str);
                 if (result) free_collection(result);
                 printf("  До свидания!\n\n");
+                return 0;
+            
+            case 12:
+                Collection *cat_coll = create_collection(get_string_type());
+                const char *cat_str = "cat";
+                append(cat_coll, &cat_str);
+                print_collection(cat_coll, "Cat's");
+                free_collection(cat_coll);
                 return 0;
 
             default:
